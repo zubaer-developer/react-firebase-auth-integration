@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -35,6 +37,7 @@ const AuthProvider = ({ children }) => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       console.log("observer from useEffect", currentUser);
       setUser(currentUser);
+      setLoading(false);
       // clear observer
     });
     return () => {
@@ -47,6 +50,7 @@ const AuthProvider = ({ children }) => {
     signInUser,
     signOutUser,
     user,
+    loading,
   };
   return <AuthContext value={authInfo}>{children}</AuthContext>;
 };
